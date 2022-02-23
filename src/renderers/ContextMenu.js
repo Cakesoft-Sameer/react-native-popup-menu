@@ -68,6 +68,17 @@ export const computePosition = (layouts, isRTL) => {
   const position = { top, [start]: left };
   return fitPositionIntoSafeArea(position, layouts);
 };
+export const computeInitial = (layouts, isRTL) => {
+  const { windowLayout, triggerLayout, optionsLayout } = layouts;
+  const { x: wX, y: wY, width: wWidth, height: wHeight } = windowLayout;
+  const { x: tX, y: tY, height: tHeight, width: tWidth } = triggerLayout;
+  const { height: oHeight, width: oWidth } = optionsLayout;
+  const top = axisPosition(oHeight, wHeight, tY - wY, tHeight);
+  const left = axisPosition(oWidth, wWidth, tX - wX, tWidth);
+  const start = isRTL ? 'right' : 'left';
+  const position = { top, [start]: left };
+  return position;
+};
 
 export default class ContextMenu extends React.Component {
 
@@ -117,6 +128,7 @@ export default class ContextMenu extends React.Component {
 // public exports
 ContextMenu.computePosition = computePosition;
 ContextMenu.fitPositionIntoSafeArea = fitPositionIntoSafeArea;
+ContextMenu.computeInitial = computeInitial;
 
 export const styles = StyleSheet.create({
   options: {

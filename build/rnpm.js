@@ -2097,6 +2097,38 @@
   } // fits options (position) into safeArea
 
 
+  var axisPositionTop = function axisPositionTop(oDim, wDim, tPos, tDim) {
+    // if options are bigger than window dimension, then render at 0
+    if (oDim > wDim) {
+      return 0;
+    } // render at trigger position if possible
+
+
+    if (tPos + oDim <= wDim) {
+      return 1;
+    } // aligned to the trigger from the bottom (right)
+
+
+    if (tPos + tDim - oDim >= 0) {
+      return 2;
+    } // compute center position
+
+
+    var pos = Math.round(tPos + tDim / 2 - oDim / 2); // check top boundary
+
+    if (pos < 0) {
+      return 3;
+    } // check bottom boundary
+
+
+    if (pos + oDim > wDim) {
+      return 4;
+    } // if everything ok, render in center position
+
+
+    return 5;
+  };
+
   var fitPositionIntoSafeArea = function fitPositionIntoSafeArea(position, layouts) {
     var windowLayout = layouts.windowLayout,
         safeAreaLayout = layouts.safeAreaLayout,
@@ -2141,7 +2173,7 @@
         oWidth = optionsLayout.width;
     var top = axisPosition(oHeight, wHeight, tY - wY, tHeight);
     var left = axisPosition(oWidth, wWidth, tX - wX, tWidth);
-    var start = isRTL ? 'right' : 'left';
+    var start = isRTL ? "right" : "left";
 
     var position = _defineProperty({
       top: top
@@ -2163,15 +2195,8 @@
         tWidth = triggerLayout.width;
     var oHeight = optionsLayout.height,
         oWidth = optionsLayout.width;
-    var top = axisPosition(oHeight, wHeight, tY - wY, tHeight);
-    var left = axisPosition(oWidth, wWidth, tX - wX, tWidth);
-    var start = isRTL ? 'right' : 'left';
-
-    var position = _defineProperty({
-      top: top
-    }, start, left);
-
-    return position;
+    var top = axisPositionTop(oHeight, wHeight, tY - wY, tHeight);
+    return top;
   };
 
   var ContextMenu =
@@ -2244,12 +2269,12 @@
   ContextMenu.computeInitial = computeInitial;
   var styles$4 = reactNative.StyleSheet.create({
     options: {
-      position: 'absolute',
+      position: "absolute",
       borderRadius: 2,
-      backgroundColor: 'white',
+      backgroundColor: "white",
       width: reactNative.PixelRatio.roundToNearestPixel(200),
       // Shadow only works on iOS.
-      shadowColor: 'black',
+      shadowColor: "black",
       shadowOpacity: 0.3,
       shadowOffset: {
         width: 3,

@@ -2149,6 +2149,30 @@
 
     return fitPositionIntoSafeArea(position, layouts);
   };
+  var computeInitial = function computeInitial(layouts, isRTL) {
+    var windowLayout = layouts.windowLayout,
+        triggerLayout = layouts.triggerLayout,
+        optionsLayout = layouts.optionsLayout;
+    var wX = windowLayout.x,
+        wY = windowLayout.y,
+        wWidth = windowLayout.width,
+        wHeight = windowLayout.height;
+    var tX = triggerLayout.x,
+        tY = triggerLayout.y,
+        tHeight = triggerLayout.height,
+        tWidth = triggerLayout.width;
+    var oHeight = optionsLayout.height,
+        oWidth = optionsLayout.width;
+    var top = axisPosition(oHeight, wHeight, tY - wY, tHeight);
+    var left = axisPosition(oWidth, wWidth, tX - wX, tWidth);
+    var start = isRTL ? 'right' : 'left';
+
+    var position = _defineProperty({
+      top: top
+    }, start, left);
+
+    return position;
+  };
 
   var ContextMenu =
   /*#__PURE__*/
@@ -2217,6 +2241,7 @@
   }(React__default.Component); // public exports
   ContextMenu.computePosition = computePosition$1;
   ContextMenu.fitPositionIntoSafeArea = fitPositionIntoSafeArea;
+  ContextMenu.computeInitial = computeInitial;
   var styles$4 = reactNative.StyleSheet.create({
     options: {
       position: 'absolute',
